@@ -1,25 +1,20 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  mongo:
-    image: mongo:6
-    container_name: mongo
+  mongo-db:
+    image: mongo:6.0
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
 
-  backend:
-    build: ./backend
-    container_name: backcon
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
+  node-backend:
+    build:
+      context: ./backend
     environment:
-      - MONGO_URL=mongodb://mongo:27017/mydb
-    volumes:
-      - ./backend:/app
+      MONGO_URL: mongodb://mongo-db:27017/mydb
+    depends_on:
+      - mongo-db
 
 volumes:
   mongo-data:
